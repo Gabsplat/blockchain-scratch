@@ -30,6 +30,7 @@ class Blockchain:
     def add_block(self, new_block):
         new_block.previous_hash = self.get_latest_block().hash
         new_block.hash = new_block.calculate_hash()
+        print("New block hash: ", new_block.hash)
         self.chain.append(new_block)
 
 # Usage example
