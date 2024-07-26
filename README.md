@@ -1,6 +1,6 @@
 # Desarrollo de una Blockchain desde Cero: Fundamentos y Ejemplo en Python
 
-- _Autor:_ Pérez Diez Gabriel, grperezdiez@uda.com.ar
+**Autor**: Pérez Diez Gabriel, grperezdiez@uda.com.ar
 
 ## Descripción
 
@@ -21,5 +21,8 @@ Este repositorio contiene una implementación básica de una blockchain desarrol
 
 ## Licencia
 
-Contacto
+-
+
+## Contacto
+
 Para cualquier consulta, puedes contactarme a través de grperezdiez@uda.com.ar
