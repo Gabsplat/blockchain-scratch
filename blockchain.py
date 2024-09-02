@@ -143,10 +143,15 @@ class Blockchain:
         latest_block = self.get_latest_block()
         new_block = Block(len(self.chain), datetime.datetime.now(), transactions, latest_block.hash)
         new_block.mine_block(self.difficulty)
+        
+        # Ensure the new block's hash is calculated after mining
+        new_block.hash = new_block.calculate_hash()
+        
+        # Append the new block to the chain
         self.chain.append(new_block)
         self.add_block_to_db(new_block)
         self.update_balances(transactions)
-        print("New block mined: ", new_block.hash)
+        print(f"Nuevo bloque minado: {new_block.hash}\n")
         return new_block
 
     def update_balances(self, transactions):
@@ -162,16 +167,16 @@ class Blockchain:
 
     def add_transaction(self, sender, recipient, amount):
         if sender != "genesis" and (sender not in self.balances or self.balances[sender] < amount):
-            print(f"Transaction from {sender} to {recipient} for {amount} coins failed: insufficient balance.")
+            print(f"Transacción de {sender} a {recipient} por la cantidad de{amount} falló: no hay saldo suficiente.\n")
             return False
         transaction = Transaction(sender, recipient, amount)
         self.pending_transactions.append(transaction)
-        print(f"Transaction added: {sender} -> {recipient}: {amount}")
+        print(f"Transacción agregada: {sender} -> {recipient}: {amount}\n")
         return True
 
     def mine_pending_transactions(self):
         if not self.pending_transactions:
-            print("No transactions to mine.")
+            print("No hay transacciones para minar.\n") 
             return None
         new_block = self.add_block(self.pending_transactions)
         self.pending_transactions = []
