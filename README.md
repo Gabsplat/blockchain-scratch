@@ -73,21 +73,21 @@ En la consola de cada nodo, puedes realizar las siguientes acciones:
 - **Agregar una transacción**:
 
   ```plaintext
-  Enter 't' to add a transaction, 'm' to mine pending transactions, or 'b' to check balance: t
-  Enter recipient port: 5002
-  Enter amount: 10.0
+  Ingrese 't' para añadir una transacción, 'm' para minar transacciones pendientes, o 'b' para verificar el saldo: t
+  Ingrese el puerto del destinatario:: 5002
+  Ingrese la cantidad: 10.0
   ```
 
 - **Minar transacciones pendientes**:
 
   ```plaintext
-  Enter 't' to add a transaction, 'm' to mine pending transactions, or 'b' to check balance: m
+  Ingrese 't' para añadir una transacción, 'm' para minar transacciones pendientes, o 'b' para verificar el saldo: m
   ```
 
 - **Verificar el saldo**:
   ```plaintext
-  Enter 't' to add a transaction, 'm' to mine pending transactions, or 'b' to check balance: b
-  Current balance: 90.0
+  Ingrese 't' para añadir una transacción, 'm' para minar transacciones pendientes, o 'b' para verificar el saldo: b
+  Balance actual: 90.0
   ```
 
 ## Arquitectura del Proyecto

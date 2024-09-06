@@ -206,3 +206,7 @@ class Blockchain:
 
     def get_balance(self, node_id):
         return self.balances.get(node_id, 0)
+
+
+
+# Implementación 
