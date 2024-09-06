@@ -1,7 +1,5 @@
 # Desarrollo de una Blockchain desde Cero: Fundamentos y Ejemplo en Python
 
-**Autor**: Pérez Diez Gabriel, grperezdiez@uda.com.ar
-
 ## Descripción
 
 Este repositorio contiene una implementación básica de una blockchain desarrollada en Python. El objetivo de este proyecto es proporcionar una comprensión fundamental de la tecnología blockchain, destacando los componentes esenciales necesarios para su funcionamiento y ofreciendo un punto de partida educativo para aquellos interesados en adentrarse en este campo.
