@@ -3,6 +3,7 @@ import threading
 import json
 import sys
 from blockchain import Blockchain, Block, Transaction
+from PyQt6.QtCore import pyqtSignal, QObject
 
 print_lock = threading.Lock()
 
@@ -10,7 +11,9 @@ def safe_print(*args, **kwargs):
     with print_lock:
         print(*args, **kwargs)
 
-class Node:
+class Node(QObject):
+    message_received = pyqtSignal(str)  # Signal to emit when a message is received
+
     def __init__(self, host, port, db_path='blockchain.db'):
         self.host = host
         self.port = port
@@ -19,18 +22,31 @@ class Node:
         self.blockchain = Blockchain(db_path=db_path)
         self.received_transactions = set()
         self.received_blocks = set()
+        self.running = False
 
     def start(self):
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.bind((self.host, self.port))
         server.listen()
 
+        self.running = True
+
         safe_print(f"Nodo escuchando en {self.host}:{self.port}")
 
-        while True:
-            client, address = server.accept()
-            client_thread = threading.Thread(target=self.handle_client, args=(client,))
-            client_thread.start()
+        print("Balance " + str(self.get_balance()))
+
+        try:
+            while self.running:
+                client, address = server.accept()
+                client_thread = threading.Thread(target=self.handle_client, args=(client,))
+                client_thread.daemon = True 
+                client_thread.start()
+        except KeyboardInterrupt:
+            safe_print("Apagando el nodo...")
+        finally:
+            self.running = False
+            server.close()
+            safe_print("Servidor cerrado.")
 
     def handle_client(self, client):
         while True:
@@ -38,6 +54,8 @@ class Node:
                 message = client.recv(1024).decode('utf-8')
                 if message:
                     self.handle_message(json.loads(message))
+                else:
+                    break
             except:
                 break
         client.close()
@@ -48,8 +66,10 @@ class Node:
             safe_print(f"Nuevo peer añadido: {message['host']}:{message['port']}")
             self.send_chain(message['host'], message['port'])
             self.send_pending_transactions(message['host'], message['port'])
+
         elif message['type'] == 'GET_PEERS':
             self.send_peers(message['host'], message['port'])
+
         elif message['type'] == 'NEW_BLOCK':
             new_block = Block.from_dict(message)
             if new_block.hash == new_block.calculate_hash() and new_block.previous_hash == self.blockchain.get_latest_block().hash:
@@ -73,6 +93,8 @@ class Node:
         elif message['type'] == 'PENDING_TRANSACTIONS':
             pending_transactions = [Transaction.from_dict(tx) for tx in message['transactions']]
             self.blockchain.pending_transactions.extend(pending_transactions)
+
+        self.message_received.emit(message)  # Emit the signal with the received message
 
     def connect_to_peer(self, host, port):
         if (host, port) not in self.peers:

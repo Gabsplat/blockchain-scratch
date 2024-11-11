@@ -205,6 +205,7 @@ class Blockchain:
         return False
 
     def get_balance(self, node_id):
+        print(self.balances)
         return self.balances.get(node_id, 0)
 
 
